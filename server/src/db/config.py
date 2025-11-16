@@ -1,17 +1,35 @@
 import logging
+import os
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
+
+# Load environment variables
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-ASYNC_DATABASE_URL = "sqlite+aiosqlite:///./sqlite.db"
-async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=False)
+# Get database URL from environment variable with fallback
+ASYNC_DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+asyncpg://progchain:progchain@localhost:5432/progchain"
+)
+
+# Create engine with appropriate pool settings for PostgreSQL
+engine_kwargs = {
+    "echo": os.getenv("ENVIRONMENT", "development") == "development",
+    "pool_pre_ping": True,  # Enable connection health checks
+    "pool_size": 10,  # Default connection pool size
+    "max_overflow": 20,  # Max connections that can be created beyond pool_size
+}
+
+async_engine = create_async_engine(ASYNC_DATABASE_URL, **engine_kwargs)
 
 AsyncSessionLocal = sessionmaker(
     autocommit=False,

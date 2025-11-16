@@ -1,6 +1,23 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: progchain
+      POSTGRES_PASSWORD: progchain
+      POSTGRES_DB: progchain
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U progchain"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    restart: always
+
   server:
     build:
       context: ./server
@@ -11,6 +28,10 @@ services:
       - ./server/.env
     environment:
       - ENVIRONMENT=production
+      - DATABASE_URL=postgresql+asyncpg://progchain:progchain@db:5432/progchain
+    depends_on:
+      db:
+        condition: service_healthy
     restart: always
     networks:
       - app-network
@@ -26,6 +47,9 @@ services:
     restart: always
     networks:
       - app-network
+
+volumes:
+  postgres_data:
 
 networks:
   app-network:
