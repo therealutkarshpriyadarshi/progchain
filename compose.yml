@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   server:
     build:
@@ -6,10 +7,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    restart: always
+    env_file:
+      - ./server/.env
     environment:
-      # Add any production environment variables here if needed
-      - ENV=production
+      - ENVIRONMENT=production
+    restart: always
+    networks:
+      - app-network
 
   client:
     build:
@@ -17,4 +21,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    depends_on:
+      - server
     restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
