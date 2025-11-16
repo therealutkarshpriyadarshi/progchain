@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "server"
+version = "0.1.0"
+description = "Backend Implementation for the Progchain Project"
+authors = ["Utkarsh Priyadarshi <utkarshpriyadarshi5026@gmail.com>"]
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain = "^0.3.21"
+langchain-openai = "^0.3.10"
+cachetools = "^5.5.2"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.0"
+sqlalchemy = "^2.0.39"
+python-dotenv = "^1.1.0"
+black = "^25.1.0"
+loguru = "^0.7.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
