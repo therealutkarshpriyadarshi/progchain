@@ -5,7 +5,12 @@
       "Bash(cp:*)",
       "Bash(poetry lock:*)",
       "Bash(docker exec:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(timeout 15 cmd:*)",
+      "Bash(docker logs:*)",
+      "Bash(timeout 10 cmd:*)"
     ],
     "deny": [],
     "ask": []

@@ -6,6 +6,7 @@ from sqlalchemy import (
     ForeignKey,
     CheckConstraint,
     Index,
+    UniqueConstraint,
     select,
     func
 )
@@ -49,6 +50,7 @@ class Roadmap(Base, TimestampMixin, PublicIDMixin):
     )
 
     __table_args__ = (
+        UniqueConstraint('public_id', name='uq_roadmap_public_id'),
         Index('idx_roadmap_updated', 'updated_at', 'public_id'),
     )
 
@@ -158,6 +160,7 @@ class RoadmapNode(Base, TimestampMixin, PublicIDMixin):
             'difficulty IS NULL OR (difficulty >= 0 AND difficulty <= 2)',
             name='check_valid_difficulty'
         ),
+        UniqueConstraint('public_id', name='uq_roadmap_node_public_id'),
         Index('idx_node_roadmap_position', 'roadmap_id', 'position'),
         Index('idx_node_parent', 'parent_node_id'),
     )
